@@ -60,26 +60,16 @@ def fetch_clinical_data(data_type, cache_dir=RAW_DIR, force=False):
         ValueError: if data_type is not PATIENT or SAMPLE.
         RuntimeError: if the HTTP request fails.
     """
-    # ------------------------------------------------------------------
-    # YOU WRITE THIS -- roughly 10 lines. See Task 2, Step 4 in the plan.
-    #
-    # 1. Reject a data_type not in VALID_TYPES with ValueError
-    # 2. If cache_dir/<data_type>.json exists and not force, return its
-    #    parsed contents
-    # 3. Otherwise call _get_with_retry(_url(data_type))
-    # 4. Create cache_dir if needed, then write the JSON -- ONLY after a
-    #    successful response
-    # 5. Return the records
-    #
-    # Useful: Path.exists(), Path.read_text(), Path.write_text(),
-    #         json.loads(), json.dumps(),
-    #         Path.mkdir(parents=True, exist_ok=True)
-    #
-    # Note cache_dir may arrive as a str in some calls -- Path(cache_dir)
-    # handles both.
-    # ------------------------------------------------------------------
-    raise NotImplementedError("YOU WRITE THIS -- see Task 2, Step 4")
+    if data_type not in VALID_TYPES:
+        raise ValueError("data_type must be PATIENT or SAMPLE")
+    path = Path(cache_dir) / f"{data_type}.json"
+    if path.exists() and not force:
+        return json.loads(path.read_text())
 
+    records = _get_with_retry(_url(data_type))
+    Path(cache_dir).mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(records))
+    return records
 
 if __name__ == "__main__":
     for dt in VALID_TYPES:
