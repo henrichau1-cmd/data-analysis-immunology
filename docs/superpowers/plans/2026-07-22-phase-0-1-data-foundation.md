@@ -76,10 +76,21 @@ mkdir -p src/data src/features src/analysis src/models src/viz tests notebooks f
 touch src/__init__.py src/data/__init__.py src/features/__init__.py src/analysis/__init__.py src/models/__init__.py src/viz/__init__.py tests/__init__.py figures/.gitkeep data/processed/.gitkeep
 ```
 
-Verify — this must print exactly six paths:
+Verify — this must print exactly **seven** paths (six packages under `src/`,
+plus `tests/`):
 
 ```bash
 find . -name "__init__.py" | sort
+```
+
+```
+./src/__init__.py
+./src/analysis/__init__.py
+./src/data/__init__.py
+./src/features/__init__.py
+./src/models/__init__.py
+./src/viz/__init__.py
+./tests/__init__.py
 ```
 
 - [ ] **Step 2: Write `requirements.txt`**
