@@ -60,13 +60,26 @@ and figures only. Raw API responses are cached to disk and never mutated.
 
 - [ ] **Step 1: Create the directory tree**
 
+Run these one line at a time. Each is self-contained — no backslash
+continuations, which get mangled when pasted into a terminal and can silently
+run the fragments as separate commands.
+
 ```bash
 cd "/Users/henrichau/workspace/Data Analysis Immunology Project"
-mkdir -p src/data src/features src/analysis src/models src/viz \
-         tests notebooks figures data/raw data/interim data/processed
-touch src/__init__.py src/data/__init__.py src/features/__init__.py \
-      src/analysis/__init__.py src/models/__init__.py src/viz/__init__.py \
-      tests/__init__.py figures/.gitkeep data/processed/.gitkeep
+```
+
+```bash
+mkdir -p src/data src/features src/analysis src/models src/viz tests notebooks figures data/raw data/interim data/processed
+```
+
+```bash
+touch src/__init__.py src/data/__init__.py src/features/__init__.py src/analysis/__init__.py src/models/__init__.py src/viz/__init__.py tests/__init__.py figures/.gitkeep data/processed/.gitkeep
+```
+
+Verify — this must print exactly six paths:
+
+```bash
+find . -name "__init__.py" | sort
 ```
 
 - [ ] **Step 2: Write `requirements.txt`**
