@@ -35,6 +35,14 @@ it — and say plainly that they should rewrite it themselves afterward.
 requirements, and the test suites the plan supplies verbatim. The constraint
 covers code embodying a real decision or a transferable pandas idiom.
 
+**The marker lives in the source, not only in the plan.** Scaffold such a
+function with a real signature and docstring (args, returns, raises), then a
+comment block giving a line estimate, numbered steps, the stdlib/pandas methods
+worth reaching for, and a pointer back to the plan task — ending in
+`raise NotImplementedError`. See `fetch_clinical_data` in `src/data/fetch.py`
+for the shape. A `NotImplementedError` in `src/` is a deliberate gap, never a
+bug to fix.
+
 ## Commands
 
 ```bash
@@ -84,11 +92,22 @@ reviewable and the transformations testable; preserve it.
 
 Every module under `src/` has a matching `tests/test_<module>.py`.
 
+**The table above is the target, not the current state.** Modules arrive one
+phase at a time; as of Phase 1 Task 2 only `fetch.py` exists, so `make process`,
+`make figures`, and `make all` fail by design. Do not "repair" the Makefile —
+check the active plan in `docs/superpowers/plans/` for what is actually in
+scope. There is no `pytest.ini` or packaging; imports resolve purely from the
+repo root plus the `__init__.py` files.
+
 ## Verified facts — assert, do not re-derive
 
-These were checked against the live API on 2026-07-22 and are asserted in
-`clean.py`. If a run contradicts one, the pipeline should stop rather than
-silently analyze the wrong cohort.
+These were checked against the live API on 2026-07-22 and are to be asserted in
+`clean.py` once it exists. If a run contradicts one, the pipeline should stop
+rather than silently analyze the wrong cohort.
+
+`data/raw/` is gitignored, so this table is the repo's only committed record of
+the cohort. A fresh clone needs network for `make data` exactly once; every
+later command reads the cache.
 
 | Quantity | Value |
 | --- | --- |
