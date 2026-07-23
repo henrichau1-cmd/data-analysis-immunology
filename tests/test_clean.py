@@ -40,3 +40,23 @@ def test_pivot_handles_missing_attribute_for_one_patient():
     out = clean.pivot_clinical(partial, id_field="patientId")
     assert len(out) == 2
     assert pd.isna(out.loc[out["patientId"] == "P-2", "SEX"].iloc[0])
+
+def test_parse_os_status_dtype_changed():
+    df = pd.DataFrame({"OS_MONTHS": ["5.5", "12.0"]})
+    out = clean.coerce_types(df)
+    assert pd.api.types.is_numeric_dtype(out["OS_MONTHS"])
+
+def test_parse_os_status_deceased_is_true():
+    assert clean.parse_os_status("1:DECEASED") is True
+
+def test_parse_os_status_not_deceased_is_false():
+    assert clean.parse_os_status("0:LIVING") is False
+
+def test_parse_os_status_unknown_is_ValueError():
+    with pytest.raises(ValueError):
+        clean.parse_os_status("2:UNKNOWN")
+
+def test_coerce_types_makes_tmb_numeric():
+    df = pd.DataFrame({"TMB_NONSYNONYMOUS": ["5.87", "25.45"]})
+    out = clean.coerce_types(df)
+    assert pd.api.types.is_numeric_dtype(out["TMB_NONSYNONYMOUS"])

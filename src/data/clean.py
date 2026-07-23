@@ -27,18 +27,29 @@ def pivot_clinical(records, id_field):
         with id_field as a regular column.
     """
     df = pd.DataFrame(records)
-    pivoted = df.pivot(index=id_field, columns= "clinicalAttributeId", values= "value").reset_index()
+    pivoted = df.pivot(index=id_field, columns="clinicalAttributeId", values="value").reset_index()
     return pivoted
-    # ------------------------------------------------------------------
-    # YOU WRITE THIS -- about 4 lines. See Task 3, Step 4 in the plan.
-    #
-    # 1. Build a DataFrame from the list of dicts
-    # 2. Reshape it: one row per id_field, one column per
-    #    clinicalAttributeId, filled with value
-    # 3. The reshape leaves id_field as the index -- make it a column again
-    # 4. Return the result
-    #
-    # Useful: pd.DataFrame(), DataFrame.pivot(index=, columns=, values=),
-    #         DataFrame.reset_index()
-    # ------------------------------------------------------------------
-    raise NotImplementedError("YOU WRITE THIS -- see Task 3, Step 4")
+
+
+NUMERIC_COLUMNS = ["OS_MONTHS", "TMB_NONSYNONYMOUS", "MUTATION_COUNT",
+                   "AGE_AT_SEQ_REPORT"]
+
+
+def parse_os_status(value):
+    """Convert cBioPortal survival status to a boolean. True means deceased."""
+    if value == "1:DECEASED":
+        return True
+    elif value == "0:LIVING":
+        return False
+    else:
+        raise ValueError("Unrecognized OS: {}".format(value))
+
+def coerce_types(df):
+    """Return a copy of df with numeric columns converted from strings."""
+    df = df.copy()
+    for column in NUMERIC_COLUMNS:
+        if column in df.columns:
+            df[column] = pd.to_numeric(df[column], errors="coerce")
+    return df
+    # YOU WRITE THIS -- see Task 4, Step 3
+    raise NotImplementedError("YOU WRITE THIS -- see Task 4, Step 3")
